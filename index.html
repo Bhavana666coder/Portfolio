@@ -1,0 +1,392 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<style>:root{color-scheme:light}body{margin:0}img{max-width:100%}[hidden]{display:none!important}</style>
+<title>S V Bhavana Portfolio</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700;12..96,800&family=Source+Sans+3:wght@400;600&family=JetBrains+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: left-aligned editorial column. Hero carries a raw -> cleaned -> curated pipeline strip; projects are ruled rows, not cards. */
+:root {
+  --bg: #F4F6F9;
+  --surface: #FFFFFF;
+  --fg: #14213D;
+  --muted: #55627A;
+  --rule: #D5DBE6;
+  --accent: #F2B705;      /* Hadoop yellow, used for marks and the primary button */
+  --on-accent: #14213D;
+  --stage: #E9EEF6;
+  --font-display: "Bricolage Grotesque", "Segoe UI", system-ui, sans-serif;
+  --font-body: "Source Sans 3", "Segoe UI", system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, Menlo, Consolas, monospace;
+}
+@media (prefers-color-scheme: dark) {
+  :root:not([data-theme="light"]) {
+    --bg: #0D1526; --surface: #141F36; --fg: #E7ECF6; --muted: #9AA7C0;
+    --rule: #26334F; --accent: #F2B705; --on-accent: #0D1526; --stage: #1A2744;
+    color-scheme: dark;
+  }
+}
+:root[data-theme="dark"] {
+  --bg: #0D1526; --surface: #141F36; --fg: #E7ECF6; --muted: #9AA7C0;
+  --rule: #26334F; --accent: #F2B705; --on-accent: #0D1526; --stage: #1A2744;
+  color-scheme: dark;
+}
+
+* { box-sizing: border-box; }
+body {
+  background: var(--bg);
+  color: var(--fg);
+  font-family: var(--font-body);
+  font-size: 17px;
+  line-height: 1.6;
+  padding-block: 28px 56px;
+  padding-left: max(16px, env(safe-area-inset-left, 0px));
+  padding-right: max(16px, env(safe-area-inset-right, 0px));
+}
+.wrap { max-width: 980px; margin: 0 auto; display: flex; flex-direction: column; gap: 72px; }
+a { color: inherit; text-decoration-color: var(--accent); text-decoration-thickness: 2px; text-underline-offset: 3px; }
+a:hover { text-decoration-color: var(--fg); }
+a:focus-visible, button:focus-visible { outline: 3px solid var(--accent); outline-offset: 3px; border-radius: 3px; }
+h1, h2, h3 { font-family: var(--font-display); text-wrap: balance; margin: 0; line-height: 1.1; }
+p { margin: 0; }
+.mono { font-family: var(--font-mono); font-size: 13px; letter-spacing: 0.02em; }
+.label { font-family: var(--font-mono); font-size: 12px; letter-spacing: 0.12em; text-transform: uppercase; color: var(--muted); }
+
+/* top bar */
+.top { display: flex; flex-wrap: wrap; justify-content: space-between; align-items: baseline; gap: 12px 28px; }
+.mark { font-family: var(--font-display); font-weight: 800; font-size: 20px; letter-spacing: -0.01em; }
+.mark span { background: var(--accent); color: var(--on-accent); padding: 0 6px; margin-right: 6px; }
+.top nav { display: flex; flex-wrap: wrap; gap: 6px 22px; }
+.top nav a { font-family: var(--font-mono); font-size: 13px; text-decoration: none; color: var(--muted); }
+.top nav a:hover { color: var(--fg); text-decoration: underline; text-decoration-color: var(--accent); }
+
+/* hero */
+.hero { display: flex; flex-direction: column; gap: 26px; margin-top: -24px; }
+.hero h1 { font-size: clamp(34px, 6.4vw, 66px); font-weight: 800; letter-spacing: -0.025em; max-width: 16ch; }
+.hero h1 em { font-style: normal; background: linear-gradient(transparent 62%, var(--accent) 62%, var(--accent) 92%, transparent 92%); }
+.hero .lede { max-width: 62ch; font-size: 19px; color: var(--fg); }
+.actions { display: flex; flex-wrap: wrap; gap: 12px; }
+.btn { display: inline-block; font-family: var(--font-mono); font-size: 14px; font-weight: 500; text-decoration: none; padding: 11px 18px; border: 2px solid var(--fg); }
+.btn.primary { background: var(--accent); color: var(--on-accent); border-color: var(--accent); }
+.btn:hover { background: var(--fg); color: var(--bg); border-color: var(--fg); }
+
+.pipeline { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: 10px; align-items: stretch; margin-top: 6px; }
+.stage { background: var(--stage); padding: 14px 14px 16px; display: flex; flex-direction: column; gap: 6px; position: relative; min-width: 0; }
+.stage:not(:last-child)::after { content: "\2192"; position: absolute; right: -9px; top: 12px; font-family: var(--font-mono); font-size: 14px; color: var(--muted); background: var(--bg); line-height: 1; padding: 2px 0; z-index: 1; }
+.stage .path { font-family: var(--font-mono); font-size: 13px; font-weight: 500; overflow-wrap: anywhere; }
+.stage .what { font-size: 15px; color: var(--muted); line-height: 1.4; }
+.stage.last { border-top: 3px solid var(--accent); }
+
+/* sections */
+section > .head { display: flex; flex-wrap: wrap; align-items: baseline; justify-content: space-between; gap: 6px 20px; border-bottom: 2px solid var(--fg); padding-bottom: 10px; margin-bottom: 8px; }
+section > .head h2 { font-size: clamp(24px, 3.6vw, 32px); font-weight: 700; letter-spacing: -0.015em; }
+
+.project { display: grid; grid-template-columns: minmax(0, 5fr) minmax(0, 8fr); gap: 14px 40px; padding: 28px 0; border-bottom: 1px solid var(--rule); }
+.project:last-child { border-bottom: 0; }
+.p-meta { display: flex; flex-direction: column; gap: 10px; }
+.p-meta .n { font-family: var(--font-mono); font-size: 13px; color: var(--muted); }
+.p-meta h3 { font-size: clamp(21px, 2.8vw, 26px); font-weight: 700; letter-spacing: -0.01em; }
+.stack { display: flex; flex-wrap: wrap; gap: 6px; margin: 0; padding: 0; list-style: none; }
+.stack li { font-family: var(--font-mono); font-size: 12px; background: var(--stage); padding: 2px 8px; }
+.p-body { display: flex; flex-direction: column; gap: 12px; min-width: 0; }
+.p-body ul { margin: 0; padding-left: 1.15em; display: flex; flex-direction: column; gap: 8px; }
+.p-body li::marker { color: var(--accent); }
+.bench { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; margin-top: 4px; }
+.bench div { border-top: 3px solid var(--accent); background: var(--surface); padding: 10px 12px 12px; display: flex; flex-direction: column; gap: 2px; min-width: 0; }
+.bench .v { font-family: var(--font-display); font-weight: 700; font-size: 20px; letter-spacing: -0.01em; font-variant-numeric: tabular-nums; }
+.bench .k { font-size: 14px; color: var(--muted); line-height: 1.35; }
+
+/* experience + education */
+.two { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 28px 48px; padding-top: 12px; }
+.entry { display: flex; flex-direction: column; gap: 4px; padding: 14px 0; border-bottom: 1px solid var(--rule); }
+.entry:last-child { border-bottom: 0; }
+.entry h3 { font-size: 20px; font-weight: 700; }
+.entry .when { font-family: var(--font-mono); font-size: 13px; color: var(--muted); }
+.entry p { color: var(--muted); }
+.col-title { padding-top: 14px; }
+
+/* skills */
+.skills { display: grid; grid-template-columns: 190px minmax(0, 1fr); gap: 0 28px; margin: 0; padding-top: 6px; }
+.skills dt { font-family: var(--font-mono); font-size: 13px; font-weight: 500; padding: 14px 0; border-bottom: 1px solid var(--rule); }
+.skills dd { margin: 0; padding: 12px 0; border-bottom: 1px solid var(--rule); display: flex; flex-wrap: wrap; gap: 6px; }
+.skills dd span { background: var(--stage); padding: 1px 9px; font-size: 15px; }
+
+/* contact */
+.contact { background: var(--fg); color: var(--bg); padding: 34px clamp(18px, 4vw, 40px); display: flex; flex-direction: column; gap: 18px; }
+.contact h2 { font-size: clamp(26px, 4vw, 38px); font-weight: 800; letter-spacing: -0.02em; max-width: 20ch; }
+.contact p { max-width: 60ch; opacity: 0.85; }
+.contact .row { display: flex; flex-wrap: wrap; gap: 12px 16px; align-items: center; }
+.contact .addr { font-family: var(--font-mono); font-size: 15px; user-select: all; overflow-wrap: anywhere; }
+.contact .btn { border-color: var(--bg); color: var(--bg); background: transparent; cursor: pointer; }
+.contact .btn:hover { background: var(--accent); color: var(--on-accent); border-color: var(--accent); }
+.contact a.btn { text-decoration: none; }
+footer { font-family: var(--font-mono); font-size: 12px; color: var(--muted); }
+
+@media (max-width: 820px) {
+  .pipeline { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .stage:nth-child(2)::after { display: none; }
+  .project { grid-template-columns: minmax(0, 1fr); }
+  .two { grid-template-columns: minmax(0, 1fr); }
+  .skills { grid-template-columns: minmax(0, 1fr); }
+  .skills dt { border-bottom: 0; padding-bottom: 0; }
+}
+@media (max-width: 480px) {
+  .pipeline { grid-template-columns: minmax(0, 1fr); }
+  .stage::after { display: none; }
+  .bench { grid-template-columns: minmax(0, 1fr); }
+  .wrap { gap: 56px; }
+}
+@media (prefers-reduced-motion: no-preference) {
+  .btn { transition: background 0.15s, color 0.15s; }
+}
+</style>
+
+</head>
+<body>
+<div class="wrap">
+
+  <header class="top">
+    <div class="mark"><span>SV</span>Bhavana</div>
+    <nav aria-label="Sections">
+      <a href="#projects">projects</a>
+      <a href="#experience">experience</a>
+      <a href="#skills">skills</a>
+      <a href="#contact">contact</a>
+    </nav>
+  </header>
+
+  <main style="display:flex;flex-direction:column;gap:72px">
+
+  <section class="hero" aria-labelledby="top-title">
+    <p class="label">B.Tech CSE &middot; PES University &middot; Class of 2028</p>
+    <h1 id="top-title">I build data pipelines and the <em>models</em> that run on them.</h1>
+    <p class="lede">Third-year computer science student working on big data engineering, machine learning and data analysis. I run Spark and Hadoop pipelines on YARN, stream events through Kafka, and turn the results into recommendations a business team can act on. I am looking for full-time data engineering and data science roles from 2028.</p>
+    <div class="actions">
+      <a class="btn primary" href="https://github.com/Bhavana666coder/olist-lakehouse">View the code</a>
+      <a class="btn" href="https://www.linkedin.com/in/bhavana-7741a0336">LinkedIn</a>
+      <a class="btn" href="https://github.com/Bhavana666coder">GitHub profile</a>
+    </div>
+
+    <div class="pipeline" role="list" aria-label="How the projects connect">
+      <div class="stage" role="listitem">
+        <span class="label">Raw</span>
+        <span class="path">/datalake/raw</span>
+        <span class="what">9 Olist CSV datasets, about 1.5M rows, on HDFS</span>
+      </div>
+      <div class="stage" role="listitem">
+        <span class="label">Cleaned</span>
+        <span class="path">/datalake/cleaned</span>
+        <span class="what">Explicit schemas, deduplication, typed Parquet</span>
+      </div>
+      <div class="stage" role="listitem">
+        <span class="label">Curated</span>
+        <span class="path">/datalake/curated</span>
+        <span class="what">Joined, partitioned tables for analytics</span>
+      </div>
+      <div class="stage last" role="listitem">
+        <span class="label">On top</span>
+        <span class="path">ML &middot; stream &middot; tune</span>
+        <span class="what">Prediction, Kafka streaming, tuning, recommender</span>
+      </div>
+    </div>
+  </section>
+
+  <section id="projects" aria-labelledby="projects-title">
+    <div class="head">
+      <h2 id="projects-title">Projects</h2>
+      <p class="mono">Five projects, one shared cluster and repository &middot; <a href="https://github.com/Bhavana666coder/olist-lakehouse">olist-lakehouse</a></p>
+    </div>
+
+    <article class="project">
+      <div class="p-meta">
+        <span class="n">Project 1</span>
+        <h3>E-Commerce Data Lakehouse and ETL Pipeline</h3>
+        <ul class="stack"><li>Apache Spark</li><li>PySpark</li><li>Hadoop</li><li>HDFS</li><li>YARN</li><li>Parquet</li><li>Docker</li></ul>
+      </div>
+      <div class="p-body">
+        <ul>
+          <li>Built a distributed ETL pipeline that turns 9 Brazilian e-commerce CSV datasets (about 1.5M rows) into raw, cleaned and curated data layers.</li>
+          <li>Stored the processed datasets as Parquet on HDFS for downstream analytics and machine learning.</li>
+        </ul>
+      </div>
+    </article>
+
+    <article class="project">
+      <div class="p-meta">
+        <span class="n">Project 2</span>
+        <h3>Repeat-Purchase Prediction</h3>
+        <ul class="stack"><li>PySpark</li><li>Spark MLlib</li><li>Machine learning</li></ul>
+      </div>
+      <div class="p-body">
+        <ul>
+          <li>Developed a repeat-purchase prediction workflow on the curated tables, framing the task as a purchase within a 180-day window.</li>
+          <li>Compared six Spark MLlib classifiers on a test set of 13,796 customers, of whom 326 (2.4%) were repeat buyers.</li>
+          <li>Reported PR-AUC and recall instead of accuracy because of the class imbalance. Random Forest had the highest accuracy (68.66%) but lower recall.</li>
+        </ul>
+        <div class="bench" role="list" aria-label="Measured results">
+          <div role="listitem"><span class="v">0.584</span><span class="k">Best ROC-AUC, Logistic Regression</span></div>
+          <div role="listitem"><span class="v">0.037</span><span class="k">Best PR-AUC, Linear SVM, against a 0.024 baseline</span></div>
+          <div role="listitem"><span class="v">57.67%</span><span class="k">Highest recall, Linear SVM</span></div>
+        </div>
+      </div>
+    </article>
+
+    <article class="project">
+      <div class="p-meta">
+        <span class="n">Project 3</span>
+        <h3>Real-Time Order Pipeline</h3>
+        <ul class="stack"><li>Apache Kafka</li><li>Spark Structured Streaming</li><li>Hadoop</li><li>HDFS</li></ul>
+      </div>
+      <div class="p-body">
+        <ul>
+          <li>Built a streaming pipeline that replays historical order events through Kafka and processes them with Spark Structured Streaming.</li>
+          <li>Implemented raw-event ingestion and windowed order and revenue aggregates, with Parquet output and checkpoint-based recovery on HDFS.</li>
+        </ul>
+      </div>
+    </article>
+
+    <article class="project">
+      <div class="p-meta">
+        <span class="n">Project 4</span>
+        <h3>Spark Performance Tuning on YARN</h3>
+        <ul class="stack"><li>Apache Spark</li><li>Hadoop</li><li>YARN</li><li>Parquet</li></ul>
+      </div>
+      <div class="p-body">
+        <ul>
+          <li>Benchmarked shuffle partition tuning, broadcast joins and Adaptive Query Execution (AQE) on the same job.</li>
+        </ul>
+        <div class="bench" role="list" aria-label="Measured results">
+          <div role="listitem"><span class="v">67.00 s &rarr; 29.99 s</span><span class="k">Job runtime across tested configurations</span></div>
+          <div role="listitem"><span class="v">2.05 s &rarr; 1.12 s</span><span class="k">Partition-pruning query</span></div>
+          <div role="listitem"><span class="v">4.54 s &rarr; 0.80 s</span><span class="k">Small-file read time</span></div>
+        </div>
+      </div>
+    </article>
+
+    <article class="project">
+      <div class="p-meta">
+        <span class="n">Project 5</span>
+        <h3>Product Recommender: ALS vs. Popularity Baseline</h3>
+        <ul class="stack"><li>PySpark</li><li>Spark MLlib</li><li>ALS</li><li>Collaborative filtering</li></ul>
+      </div>
+      <div class="p-body">
+        <ul>
+          <li>Built a recommendation workflow on 8,755 filtered customer and product interactions using implicit-feedback ALS.</li>
+          <li>Compared ALS with a popularity baseline on Hit@10, Precision@10, NDCG@10 and catalog coverage.</li>
+          <li>The popularity baseline scored higher on the ranking metrics, while ALS covered about 10 times more of the catalog. Most customers buy once, so there is little history to learn from.</li>
+        </ul>
+        <div class="bench" role="list" aria-label="ALS against the popularity baseline">
+          <div role="listitem"><span class="v">1.70% vs 2.90%</span><span class="k">Hit@10, ALS vs popularity</span></div>
+          <div role="listitem"><span class="v">0.76% vs 1.36%</span><span class="k">NDCG@10, ALS vs popularity</span></div>
+          <div role="listitem"><span class="v">5.72% vs 0.54%</span><span class="k">Catalog coverage, ALS vs popularity</span></div>
+        </div>
+      </div>
+    </article>
+  </section>
+
+  <section id="experience" aria-labelledby="exp-title">
+    <div class="head">
+      <h2 id="exp-title">Experience and education</h2>
+    </div>
+    <div class="two">
+      <div>
+        <p class="label col-title">Experience</p>
+        <div class="entry">
+          <h3>GCI Program, Matsuo-Iwasawa Lab</h3>
+          <span class="when">University of Tokyo &middot; Apr 2026 &ndash; Jul 2026</span>
+          <p>International Data Science and Machine Learning Program.</p>
+        </div>
+        <div class="entry">
+          <h3>Deloitte Virtual Internship</h3>
+          <span class="when">Australia &middot; Data Analytics Job Simulation</span>
+          <p>Data analysis.</p>
+        </div>
+      </div>
+      <div>
+        <p class="label col-title">Education</p>
+        <div class="entry">
+          <h3>PES University</h3>
+          <span class="when">2024 &ndash; 2028</span>
+          <p>B.Tech in Computer Science and Information Technology. Coursework: Data Structures and Algorithms, Machine Learning, Data Analysis, Big Data Analytics (in progress), Database Management Systems (in progress).</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section id="skills" aria-labelledby="skills-title">
+    <div class="head">
+      <h2 id="skills-title">Skills</h2>
+    </div>
+    <dl class="skills">
+      <dt>Languages</dt>
+      <dd><span>Python</span><span>C</span><span>SQL</span></dd>
+      <dt>Data engineering</dt>
+      <dd><span>Apache Spark</span><span>PySpark</span><span>Hadoop</span><span>HDFS</span><span>YARN</span><span>Kafka</span><span>Parquet</span></dd>
+      <dt>SQL and databases</dt>
+      <dd><span>PostgreSQL</span><span>Joins</span><span>Subqueries</span><span>Aggregations</span><span>CTEs</span><span>Window functions</span></dd>
+      <dt>Machine learning</dt>
+      <dd><span>Spark MLlib</span><span>Random Forest</span><span>Na&iuml;ve Bayes</span><span>K-Means</span><span>ALS</span><span>Model evaluation</span></dd>
+      <dt>Tools</dt>
+      <dd><span>Git and GitHub</span><span>VS Code</span><span>Jupyter Notebook</span><span>Docker</span><span>Ubuntu and Linux</span></dd>
+      <dt>Working style</dt>
+      <dd><span>Problem solving</span><span>Analytical thinking</span><span>Clear communication</span><span>Teamwork</span><span>Adaptability</span><span>Time management</span><span>Attention to detail</span></dd>
+    </dl>
+  </section>
+
+  <section aria-labelledby="beyond-title">
+    <div class="head">
+      <h2 id="beyond-title">Beyond the code</h2>
+    </div>
+    <div class="two">
+      <div class="entry">
+        <h3>Japanese</h3>
+        <p>I am learning to speak Japanese so I can work in Japanese-speaking teams.</p>
+      </div>
+      <div class="entry">
+        <h3>Outside work</h3>
+        <p>Swimming, movies, series and dramas, and music. I also like trying new technologies on personal projects.</p>
+      </div>
+    </div>
+  </section>
+
+  <section id="contact" class="contact" aria-labelledby="contact-title">
+    <h2 id="contact-title">Hiring for 2028? Let&rsquo;s talk.</h2>
+    <p>I am ready to join a team, work hard and keep learning new technologies, both on my own and from colleagues.</p>
+    <div class="row">
+      <span class="addr" id="email-text">bhavana06016@gmail.com</span>
+      <button class="btn" id="copy-btn" type="button">Copy email</button>
+      <a class="btn" href="https://www.linkedin.com/in/bhavana-7741a0336">LinkedIn</a>
+      <a class="btn" href="https://github.com/Bhavana666coder/olist-lakehouse">Code</a>
+    </div>
+  </section>
+
+  </main>
+
+  <footer>S V Bhavana &middot; B.Tech CSE, PES University, 2028</footer>
+</div>
+
+<script>
+(function () {
+  var btn = document.getElementById('copy-btn');
+  var txt = document.getElementById('email-text');
+  if (!btn || !txt) return;
+  function selectText() {
+    try {
+      var r = document.createRange(); r.selectNodeContents(txt);
+      var s = window.getSelection(); s.removeAllRanges(); s.addRange(r);
+    } catch (e) {}
+  }
+  btn.addEventListener('click', function () {
+    var done = function (m) { btn.textContent = m; setTimeout(function () { btn.textContent = 'Copy email'; }, 2000); };
+    try {
+      navigator.clipboard.writeText(txt.textContent.trim()).then(function () { done('Copied'); }, function () { selectText(); done('Selected, press copy'); });
+    } catch (e) { selectText(); done('Selected, press copy'); }
+  });
+})();
+</script>
+
+</body>
+</html>
